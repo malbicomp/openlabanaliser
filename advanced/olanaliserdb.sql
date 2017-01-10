@@ -80,7 +80,7 @@ CREATE TABLE `grafico` (
   `pseudocampoidentidade` int(11) NOT NULL,
   `x` int(11) NOT NULL,
   `y` int(11) NOT NULL,
-  `z` int(11) NOT NULL
+  `z` int(11)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
