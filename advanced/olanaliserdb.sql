@@ -31,7 +31,8 @@ CREATE TABLE `campodump` (
   `idDump` int(11) NOT NULL,
   `nome` varchar(50) NOT NULL,
   `descricao` varchar(100) NOT NULL,
-  `campofisicodump` int(11) NOT NULL
+  `campofisicodump` int(11) NOT NULL,
+  `tipodump` varchar(200) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
