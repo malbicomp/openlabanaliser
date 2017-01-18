@@ -17,6 +17,11 @@ use Yii;
  */
 class Dump extends \yii\db\ActiveRecord
 {
+    public $fileCSV;
+    public $fileCSVName;
+
+    public $cont;
+
     /**
      * @inheritdoc
      */
@@ -33,6 +38,7 @@ class Dump extends \yii\db\ActiveRecord
         return [
             [['nome', 'descricao'], 'required'],
             [['nome'], 'string', 'max' => 50],
+            [['fileCSV'], 'file', 'skipOnEmpty' => false],
             [['descricao'], 'string', 'max' => 200],
         ];
     }
@@ -71,5 +77,43 @@ class Dump extends \yii\db\ActiveRecord
     public function getIndicadors()
     {
         return $this->hasMany(Indicador::className(), ['iddump' => 'id']);
+    }
+
+    public function afterSave($insert, $changedAttributes)
+    {
+        if (($handle = fopen('CSV/'.$this->fileCSVName, "r")) !== FALSE) {
+            $dado = explode(';', fgets($handle));
+            $qteCampo = count($dado);
+            rewind($handle);
+            while (($dado = fgets($handle)) !== FALSE) {
+                $dado = explode(';', $dado);
+                $dadosdump = new Dadosdump();
+                $dadosdump->iddumpfk = $this->id;
+                for($i=0;$i<$qteCampo;$i++){
+                    $campox = 'campo'.($i+1);
+                    $dadosdump->$campox = $dado[$i]; 
+                }
+                if (!$dadosdump->save())
+                    return false;
+            }
+
+            fclose($handle);
+        }else{
+            return false;
+        }
+    }
+
+    /*
+    * Upload file CSV
+    */
+    public function upload()
+    {
+        if ($this->validate()) {
+            $this->fileCSVName = time() . '.' . $this->fileCSV->extension;
+            $this->fileCSV->saveAs('CSV/' . $this->fileCSVName);
+            return true;
+        } else {
+            return false;
+        }
     }
 }

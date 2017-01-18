@@ -37,7 +37,7 @@ class Dadosdump extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['iddumpfk', 'campo1', 'campo2', 'campo3', 'campo4', 'campo5', 'campo6', 'campo7', 'campo8', 'campo9'], 'required'],
+            [['iddumpfk'], 'required'],
             [['iddumpfk'], 'integer'],
             [['campo1', 'campo2', 'campo3', 'campo4', 'campo5', 'campo6', 'campo7', 'campo8', 'campo9'], 'string', 'max' => 100],
             [['iddumpfk'], 'exist', 'skipOnError' => true, 'targetClass' => Dump::className(), 'targetAttribute' => ['iddumpfk' => 'id']],

@@ -11,6 +11,8 @@ class LoginForm extends Model
 {
     public $username;
     public $password;
+    public $nome;
+    public $cpf;
     public $rememberMe = true;
 
     private $_user;
@@ -24,6 +26,7 @@ class LoginForm extends Model
         return [
             // username and password are both required
             [['username', 'password'], 'required'],
+            [['nome', 'cpf'], 'string'],
             // rememberMe must be a boolean value
             ['rememberMe', 'boolean'],
             // password is validated by validatePassword()
