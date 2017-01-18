@@ -8,6 +8,7 @@ use app\models\DumpSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\web\UploadedFile;
 
 /**
  * DumpController implements the CRUD actions for Dump model.
@@ -65,8 +66,17 @@ class DumpController extends Controller
     {
         $model = new Dump();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if ($model->load(Yii::$app->request->post())) {
+            $model->fileCSV = UploadedFile::getInstance($model, 'fileCSV');
+            if ($model->upload()) {
+                if($model->save()){
+                    return $this->redirect(['view', 'id' => $model->id]);
+                }else{
+                    return "Falha ao salvar no banco de dados";
+                }
+            }else{
+                return "Falha ao Salvar CSV";
+            }
         } else {
             return $this->render('create', [
                 'model' => $model,
