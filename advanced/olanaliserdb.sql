@@ -3,9 +3,9 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Tempo de geração: 18/01/2017 às 15:15
+-- Tempo de geração: 19/01/2017 às 01:20
 -- Versão do servidor: 5.7.16-0ubuntu0.16.04.1
--- Versão do PHP: 7.0.14-2+deb.sury.org~xenial+1
+-- Versão do PHP: 7.0.13-0ubuntu0.16.04.1
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -32,7 +32,7 @@ CREATE TABLE `campodump` (
   `nome` varchar(50) NOT NULL,
   `descricao` varchar(100) NOT NULL,
   `campofisicodump` int(11) NOT NULL,
-  `tipodump` varchar(200) NOT NULL
+  `tipoCampo` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -44,15 +44,15 @@ CREATE TABLE `campodump` (
 CREATE TABLE `dadosdump` (
   `id` bigint(20) NOT NULL,
   `iddumpfk` int(11) NOT NULL,
-  `campo1` varchar(100),
-  `campo2` varchar(100),
-  `campo3` varchar(100),
-  `campo4` varchar(100),
-  `campo5` varchar(100),
-  `campo6` varchar(100),
-  `campo7` varchar(100),
-  `campo8` varchar(100),
-  `campo9` varchar(100)
+  `campo1` varchar(100) DEFAULT NULL,
+  `campo2` varchar(100) DEFAULT NULL,
+  `campo3` varchar(100) DEFAULT NULL,
+  `campo4` varchar(100) DEFAULT NULL,
+  `campo5` varchar(100) DEFAULT NULL,
+  `campo6` varchar(100) DEFAULT NULL,
+  `campo7` varchar(100) DEFAULT NULL,
+  `campo8` varchar(100) DEFAULT NULL,
+  `campo9` varchar(100) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -64,9 +64,9 @@ CREATE TABLE `dadosdump` (
 CREATE TABLE `dump` (
   `id` int(11) NOT NULL,
   `nome` varchar(50) NOT NULL,
-  `descricao` varchar(200) NOT NULL
+  `descricao` varchar(200) NOT NULL,
+  `qteCampos` tinyint(4) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
 
 -- --------------------------------------------------------
 
@@ -299,12 +299,12 @@ ALTER TABLE `campodump`
 -- AUTO_INCREMENT de tabela `dadosdump`
 --
 ALTER TABLE `dadosdump`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=175;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT de tabela `dump`
 --
 ALTER TABLE `dump`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT de tabela `grafico`
 --

@@ -20,8 +20,6 @@ class Dump extends \yii\db\ActiveRecord
     public $fileCSV;
     public $fileCSVName;
 
-    public $cont;
-
     /**
      * @inheritdoc
      */
@@ -38,6 +36,7 @@ class Dump extends \yii\db\ActiveRecord
         return [
             [['nome', 'descricao'], 'required'],
             [['nome'], 'string', 'max' => 50],
+            [['qteCampos'], 'integer'],
             [['fileCSV'], 'file', 'skipOnEmpty' => false],
             [['descricao'], 'string', 'max' => 200],
         ];
@@ -79,17 +78,27 @@ class Dump extends \yii\db\ActiveRecord
         return $this->hasMany(Indicador::className(), ['iddump' => 'id']);
     }
 
+    public function beforeSave($insert)
+    {
+        if (($handle = fopen('CSV/'.$this->fileCSVName, "r")) !== FALSE){
+            $dado = explode(';', fgets($handle));
+            $this->qteCampos = count($dado);
+            rewind($handle);
+            fclose($handle);
+            return true;
+        }else{
+            return false;
+        }
+    }
+
     public function afterSave($insert, $changedAttributes)
     {
         if (($handle = fopen('CSV/'.$this->fileCSVName, "r")) !== FALSE) {
-            $dado = explode(';', fgets($handle));
-            $qteCampo = count($dado);
-            rewind($handle);
             while (($dado = fgets($handle)) !== FALSE) {
                 $dado = explode(';', $dado);
                 $dadosdump = new Dadosdump();
                 $dadosdump->iddumpfk = $this->id;
-                for($i=0;$i<$qteCampo;$i++){
+                for($i=0 ; $i < $this->qteCampos; $i++){
                     $campox = 'campo'.($i+1);
                     $dadosdump->$campox = $dado[$i]; 
                 }
@@ -98,6 +107,7 @@ class Dump extends \yii\db\ActiveRecord
             }
 
             fclose($handle);
+            unlink('CSV/'.$this->fileCSVName);
         }else{
             return false;
         }

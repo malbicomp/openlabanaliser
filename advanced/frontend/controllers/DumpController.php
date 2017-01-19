@@ -70,18 +70,19 @@ class DumpController extends Controller
             $model->fileCSV = UploadedFile::getInstance($model, 'fileCSV');
             if ($model->upload()) {
                 if($model->save()){
-                    return $this->redirect(['view', 'id' => $model->id]);
+                    Yii::$app->getSession()->setFlash('success', 'Dump Salvo com Sucesso.');
+                    return $this->redirect(['campodump/create', 'idDump' => $model->id]);
                 }else{
-                    return "Falha ao salvar no banco de dados";
+                    Yii::$app->getSession()->setFlash('error', 'Falha ao Salvar no Banco de Dados.');
                 }
             }else{
-                return "Falha ao Salvar CSV";
+                Yii::$app->getSession()->setFlash('error', 'Falha ao Enviar o Arquivo CSV.');
             }
-        } else {
-            return $this->render('create', [
-                'model' => $model,
-            ]);
         }
+
+        return $this->render('create', [
+            'model' => $model,
+        ]);
     }
 
     /**

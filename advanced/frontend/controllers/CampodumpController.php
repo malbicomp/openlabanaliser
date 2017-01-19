@@ -4,10 +4,12 @@ namespace frontend\controllers;
 
 use Yii;
 use app\models\Campodump;
+use app\models\Dump;
 use app\models\CampodumpSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\base\Model;
 
 /**
  * CampodumpController implements the CRUD actions for Campodump model.
@@ -61,15 +63,27 @@ class CampodumpController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreate()
+    public function actionCreate($idDump)
     {
-        $model = new Campodump();
+        $dump = Dump::findOne(['id' => $idDump]);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        for ($i=1; $i < $dump->qteCampos+1; $i++) { 
+            $models[$i] = new Campodump();
+            $models[$i]->idDump = $idDump;
+            $models[$i]->campofisicodump = $i;
+        }
+                
+        if (Model::loadMultiple($models, Yii::$app->request->post()) && Model::validateMultiple($models)) {
+            foreach ($models as $model) {
+                $model->save();
+            }
+            
+            return $this->redirect(['dump/index']);
+
         } else {
             return $this->render('create', [
-                'model' => $model,
+                'models' => $models,
+                'qteCampos' => $dump->qteCampos,
             ]);
         }
     }

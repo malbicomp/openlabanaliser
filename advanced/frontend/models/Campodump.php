@@ -32,8 +32,9 @@ class Campodump extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['idDump', 'nome', 'descricao', 'campofisicodump'], 'required'],
+            [['idDump', 'nome', 'descricao', 'tipoCampo'], 'required'],
             [['idDump', 'campofisicodump'], 'integer'],
+            [['tipoCampo'], 'string'],
             [['nome'], 'string', 'max' => 50],
             [['descricao'], 'string', 'max' => 100],
             [['idDump'], 'exist', 'skipOnError' => true, 'targetClass' => Dump::className(), 'targetAttribute' => ['idDump' => 'id']],
