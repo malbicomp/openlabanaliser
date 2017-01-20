@@ -94,15 +94,25 @@ class CampodumpController extends Controller
      * @param integer $id
      * @return mixed
      */
-    public function actionUpdate($id)
+    public function actionUpdate($idDump)
     {
-        $model = $this->findModel($id);
+        $dump = Dump::findOne(['id' => $idDump]);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        $models = $dump->campodumps;
+        //Falta Consertar a organização dos campos
+                
+        if (Model::loadMultiple($models, Yii::$app->request->post()) && Model::validateMultiple($models)) {
+            foreach ($models as $model) {
+                $model->save();
+            }
+            
+            return $this->redirect(['dump/index']);
+
         } else {
+
             return $this->render('update', [
-                'model' => $model,
+                'models' => $models,
+                'qteCampos' => $dump->qteCampos-1,
             ]);
         }
     }

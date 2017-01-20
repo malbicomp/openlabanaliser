@@ -13,7 +13,7 @@ use Yii;
  *
  * @property Campodump[] $campodumps
  * @property Dadosdump[] $dadosdumps
- * @property Indicador[] $indicadors
+ * @property Indicador[] $indicadores
  */
 class Dump extends \yii\db\ActiveRecord
 {
@@ -51,6 +51,8 @@ class Dump extends \yii\db\ActiveRecord
             'id' => 'ID',
             'nome' => 'Nome',
             'descricao' => 'Descricao',
+            'campodumps' => 'Qte de Campos no Dump',
+            'dadosdump' => 'Qte de Dados no Dump'
         ];
     }
 
@@ -73,7 +75,7 @@ class Dump extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getIndicadors()
+    public function getIndicadores()
     {
         return $this->hasMany(Indicador::className(), ['iddump' => 'id']);
     }
@@ -111,6 +113,14 @@ class Dump extends \yii\db\ActiveRecord
         }else{
             return false;
         }
+    }
+
+    public function beforeDelete()
+    {
+        Campodump::deleteAll(['idDump' => $this->id]);
+        Dadosdump::deleteAll(['iddumpfk' => $this->id]);
+        Indicador::deleteAll(['iddump' => $this->id]);
+        return true;
     }
 
     /*

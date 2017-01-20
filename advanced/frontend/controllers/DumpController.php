@@ -112,8 +112,15 @@ class DumpController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
-
+        $model = $this->findModel($id);
+        
+        $qteIndicadores = count($model->indicadores);
+        $qteCampos = count($model->campodumps);
+        $qteDados = count($model->dadosdumps);
+        
+        $model->delete();
+        Yii::$app->getSession()->setFlash('success', 'Dump removido com Sucesso. Foram removidos: '.$qteIndicadores.' Indicadores, '.$qteCampos.' campos e '.$qteDados.' Dados');
+        
         return $this->redirect(['index']);
     }
 

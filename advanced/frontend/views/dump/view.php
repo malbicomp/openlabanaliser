@@ -6,7 +6,7 @@ use yii\widgets\DetailView;
 /* @var $this yii\web\View */
 /* @var $model app\models\Dump */
 
-$this->title = $model->id;
+$this->title = $model->nome;
 $this->params['breadcrumbs'][] = ['label' => 'Dumps', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
@@ -15,11 +15,11 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('Delete', ['delete', 'id' => $model->id], [
+        <!-- <?= Html::a('Update', ['Atualizar', 'id' => $model->id], ['class' => 'btn btn-primary']) ?> -->
+        <?= Html::a('Remover Dump', ['delete', 'id' => $model->id], [
             'class' => 'btn btn-danger',
             'data' => [
-                'confirm' => 'Are you sure you want to delete this item?',
+                'confirm' => 'Tem certeza que deseja remover este dump e os dados relacionados a ele?',
                 'method' => 'post',
             ],
         ]) ?>
@@ -30,6 +30,16 @@ $this->params['breadcrumbs'][] = $this->title;
         'attributes' => [
             'nome',
             'descricao',
+            [
+             'attribute' => 'campodumps',
+             'format'=>'raw',
+             'value'=> count($model->campodumps)
+            ],
+            [
+             'attribute' => 'dadosdump',
+             'format'=>'raw',
+             'value'=> count($model->dadosdumps)
+            ],
         ],
     ]) ?>
 
